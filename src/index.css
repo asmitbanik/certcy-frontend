@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -90,11 +89,35 @@
   }
 
   body {
-    @apply bg-certcy-darkbg text-certcy-text;
+    @apply bg-certcy-darkbg text-certcy-text antialiased;
   }
 }
 
 /* Custom styles for Certcy */
 .card-gradient {
-  @apply bg-certcy-cardbg border border-gray-800 rounded-xl shadow-md;
+  @apply bg-certcy-cardbg border border-gray-800/50 rounded-xl shadow-md backdrop-blur-sm;
+  @apply transition-all duration-200 hover:border-gray-700/50;
+  @apply relative overflow-hidden;
+}
+
+.card-gradient::before {
+  content: '';
+  @apply absolute inset-0 bg-gradient-to-br from-gray-800/5 to-transparent;
+  @apply pointer-events-none;
+}
+
+/* Responsive utilities */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }

@@ -12,21 +12,28 @@ const skillsLearned = [
 
 export function ProgressSummary() {
   return (
-    <div className="card-gradient p-6">
+    <div className="card-gradient p-4 md:p-6 rounded-xl transition-all duration-200">
       <div className="flex items-center gap-2 mb-4">
-        <span className="text-orange-500">🔥</span>
-        <h3 className="text-xl font-bold text-white">Progress Summary</h3>
+        <span className="text-orange-500 text-lg">🔥</span>
+        <h3 className="text-lg md:text-xl font-bold text-white">Progress Summary</h3>
       </div>
       <p className="text-sm text-certcy-text-secondary mb-5">
         Your Pivot Path progress
       </p>
 
-      <div className="mb-8">
+      <div className="mb-6 md:mb-8">
         <div className="flex justify-between mb-2">
           <span className="text-sm text-white">Roadmap Progress</span>
-          <span className="text-sm text-white">{roadmapProgress}%</span>
+          <span className="text-sm font-medium text-white">{roadmapProgress}%</span>
         </div>
-        <Progress value={roadmapProgress} className={cn("h-2", "bg-gray-800")} />
+        <Progress 
+          value={roadmapProgress} 
+          className={cn(
+            "h-2.5 bg-gray-800/50",
+            "relative overflow-hidden rounded-full",
+            "[&>div]:bg-gradient-to-r [&>div]:from-blue-500 [&>div]:to-blue-400"
+          )} 
+        />
       </div>
 
       <div>
@@ -35,7 +42,7 @@ export function ProgressSummary() {
           {skillsLearned.map((skill) => (
             <span 
               key={skill.name}
-              className={`${skill.color} text-white text-xs rounded-md px-3 py-1`}
+              className={`${skill.color} text-white text-xs rounded-md px-3 py-1.5 transition-transform hover:scale-105 cursor-default`}
             >
               {skill.name}
             </span>
