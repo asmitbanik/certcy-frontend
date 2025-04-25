@@ -1,6 +1,7 @@
 
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell } from "recharts";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const layoffData = [
   { name: "Retail-X", value: 1000 },
@@ -18,14 +19,18 @@ const affectedRoles = [
   "Marketing Specialist"
 ];
 
-export function LayoffTracker() {
+interface LayoffTrackerProps {
+  className?: string;
+}
+
+export function LayoffTracker({ className }: LayoffTrackerProps) {
   return (
-    <div className="card-gradient p-6">
+    <div className={cn("card-gradient p-6 space-y-4 hover:shadow-lg transition-all duration-300", className)}>
       <div className="flex items-center gap-2 mb-2">
         <span className="text-certcy-red">📉</span>
         <h3 className="text-xl font-bold text-white">Layoff Tracker</h3>
       </div>
-      <p className="text-sm text-certcy-text-secondary mb-5">
+      <p className="text-sm text-certcy-text-secondary mb-4">
         Recent layoffs (last 7-30 days)
       </p>
 

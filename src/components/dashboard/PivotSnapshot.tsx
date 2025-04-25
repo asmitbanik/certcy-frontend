@@ -1,5 +1,6 @@
 
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface PivotRole {
   id: string;
@@ -29,14 +30,18 @@ const pivotRoles: PivotRole[] = [
   }
 ];
 
-export function PivotSnapshot() {
+interface PivotSnapshotProps {
+  className?: string;
+}
+
+export function PivotSnapshot({ className }: PivotSnapshotProps) {
   return (
-    <div className="card-gradient p-6">
+    <div className={cn("card-gradient p-6 space-y-4 hover:shadow-lg transition-all duration-300", className)}>
       <div className="flex items-center gap-2 mb-2">
         <span className="text-certcy-yellow">✨</span>
         <h3 className="text-xl font-bold text-white">Pivot Snapshot</h3>
       </div>
-      <p className="text-sm text-certcy-text-secondary mb-5">
+      <p className="text-sm text-certcy-text-secondary mb-4">
         Top AI-recommended roles for your pivot journey
       </p>
 
@@ -44,7 +49,7 @@ export function PivotSnapshot() {
         {pivotRoles.map((role) => (
           <div 
             key={role.id}
-            className="bg-certcy-cardbg rounded-lg border border-gray-800 p-4"
+            className="bg-certcy-cardbg rounded-lg border border-gray-800 p-4 hover:border-certcy-blue transition-colors"
           >
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-3">

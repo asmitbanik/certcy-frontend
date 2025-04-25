@@ -9,17 +9,17 @@ import { Shortcuts } from "@/components/dashboard/Shortcuts";
 const Index = () => {
   return (
     <Layout pageTitle="Dashboard">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 md:gap-6">
-        <div className="lg:col-span-8 space-y-4 md:space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-            <PivotSnapshot />
-            <LayoffTracker />
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 animate-fade-in">
+        <div className="lg:col-span-8 space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <PivotSnapshot className="hover-scale transition-all duration-300" />
+            <LayoffTracker className="hover-scale transition-all duration-300" />
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            <TodaysAction />
-            <ProgressSummary />
-            <Shortcuts />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <TodaysAction className="hover-scale transition-all duration-300" />
+            <ProgressSummary className="hover-scale transition-all duration-300" />
+            <Shortcuts className="hover-scale transition-all duration-300" />
           </div>
         </div>
       </div>
