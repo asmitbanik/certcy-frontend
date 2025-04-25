@@ -1,14 +1,19 @@
 
 import { Progress } from "@/components/ui/progress";
+import { cn } from "@/lib/utils";
 
-export function TodaysAction() {
+interface TodaysActionProps {
+  className?: string;
+}
+
+export function TodaysAction({ className }: TodaysActionProps) {
   // Current status
   const hoursLeft = 3;
   const minutesLeft = 4;
   const targetHours = 6;
 
   return (
-    <div className="card-gradient p-6">
+    <div className={cn("card-gradient p-6", className)}>
       <div className="flex items-center gap-2 mb-4">
         <span className="text-blue-500">📋</span>
         <h3 className="text-xl font-bold text-white">Today's Action</h3>

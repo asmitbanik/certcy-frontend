@@ -1,6 +1,7 @@
 
 import { Link } from "react-router-dom";
 import { RocketIcon, MessageSquare } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const shortcuts = [
   {
@@ -15,9 +16,13 @@ const shortcuts = [
   },
 ];
 
-export function Shortcuts() {
+interface ShortcutsProps {
+  className?: string;
+}
+
+export function Shortcuts({ className }: ShortcutsProps) {
   return (
-    <div className="card-gradient p-6">
+    <div className={cn("card-gradient p-6", className)}>
       <div className="flex items-center gap-2 mb-4">
         <span className="text-certcy-green">🚀</span>
         <h3 className="text-xl font-bold text-white">Shortcuts</h3>

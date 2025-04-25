@@ -10,9 +10,13 @@ const skillsLearned = [
   { name: "User Research", color: "bg-blue-300" },
 ];
 
-export function ProgressSummary() {
+interface ProgressSummaryProps {
+  className?: string;
+}
+
+export function ProgressSummary({ className }: ProgressSummaryProps) {
   return (
-    <div className="card-gradient p-4 md:p-6 rounded-xl transition-all duration-200">
+    <div className={cn("card-gradient p-4 md:p-6 rounded-xl transition-all duration-200", className)}>
       <div className="flex items-center gap-2 mb-4">
         <span className="text-orange-500 text-lg">🔥</span>
         <h3 className="text-lg md:text-xl font-bold text-white">Progress Summary</h3>
