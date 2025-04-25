@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { useParams, useNavigate } from "react-router-dom";
@@ -7,8 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Checkbox } from "@/components/ui/checkbox";
+import { cn } from "@/lib/utils";
 
-// Roadmap data by career path
 const roadmaps = {
   "data-scientist": {
     title: "Data Scientist",
@@ -190,7 +189,7 @@ const CareerRoadmap = () => {
           <div className="text-right">
             <div className="text-sm text-certcy-text-secondary mb-1">Overall Progress</div>
             <div className="flex items-center gap-2">
-              <Progress value={roadmapData.progress} className="h-2 w-40 bg-gray-800" indicatorClassName="bg-blue-500" />
+              <Progress value={roadmapData.progress} className={cn("h-2 w-40", "bg-gray-800")} />
               <span className="text-white">{roadmapData.progress}%</span>
             </div>
           </div>

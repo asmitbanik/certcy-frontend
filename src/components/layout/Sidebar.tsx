@@ -1,7 +1,7 @@
 
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Home, Compass, Tool, MessageSquare } from "lucide-react";
+import { Home, Compass, Wrench, MessageSquare } from "lucide-react";
 
 type NavItem = {
   title: string;
@@ -29,7 +29,7 @@ export function Sidebar() {
     {
       title: "Tools",
       href: "/tools",
-      icon: Tool,
+      icon: Wrench,
       isActive: location.pathname.startsWith("/tools")
     },
     {

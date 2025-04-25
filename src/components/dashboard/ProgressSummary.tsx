@@ -1,5 +1,6 @@
 
 import { Progress } from "@/components/ui/progress";
+import { cn } from "@/lib/utils";
 
 const roadmapProgress = 40;
 
@@ -25,7 +26,7 @@ export function ProgressSummary() {
           <span className="text-sm text-white">Roadmap Progress</span>
           <span className="text-sm text-white">{roadmapProgress}%</span>
         </div>
-        <Progress value={roadmapProgress} className="h-2 bg-gray-800" indicatorClassName="bg-blue-500" />
+        <Progress value={roadmapProgress} className={cn("h-2", "bg-gray-800")} />
       </div>
 
       <div>
