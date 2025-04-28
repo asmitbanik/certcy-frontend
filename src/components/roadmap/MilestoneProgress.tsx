@@ -2,7 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { Clock, CheckCircle, Circle } from "lucide-react";
+import { Clock, CheckCircle, Circle, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface MilestoneProgressProps {
