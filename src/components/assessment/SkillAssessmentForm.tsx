@@ -4,7 +4,7 @@ import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
-import { Clipboard, TestTube, ArrowRight } from "lucide-react";
+import { Assessment, TestTube, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface SkillAssessmentFormProps {
@@ -146,7 +146,7 @@ export const SkillAssessmentForm = ({ pathId, onComplete }: SkillAssessmentFormP
   return (
     <div className="max-w-2xl mx-auto p-6 space-y-8">
       <div className="flex items-center gap-3 text-xl font-semibold">
-        <Clipboard className="h-6 w-6 text-blue-500" />
+        <Assessment className="h-6 w-6 text-blue-500" />
         <h2>Skill Assessment</h2>
       </div>
       
