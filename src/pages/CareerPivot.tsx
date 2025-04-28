@@ -4,8 +4,9 @@ import { Layout } from "@/components/layout/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, TrendingUp, DollarSign, Briefcase } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
 interface CareerPath {
   id: string;
@@ -75,58 +76,99 @@ const CareerPivot = () => {
 
   return (
     <Layout pageTitle="Career Pivot">
-      <div className="mb-6">
-        <p className="text-certcy-text-secondary">
-          Explore AI-recommended career pivot paths based on your skills and experience.
-        </p>
-      </div>
+      <div className="space-y-6">
+        <div className="max-w-3xl">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent animate-fade-in">
+            Discover Your Next Career Move
+          </h1>
+          <p className="text-certcy-text-secondary mt-4 text-lg leading-relaxed animate-fade-in">
+            Explore AI-recommended career paths tailored to your unique skills and experience. 
+            Each path is carefully analyzed to ensure the best match for your professional growth.
+          </p>
+        </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {careerPaths.map((path) => (
-          <Card key={path.id} className="bg-certcy-cardbg border-gray-800 text-white">
-            <CardHeader>
-              <div className="flex justify-between items-start">
-                <CardTitle className="text-xl">{path.title}</CardTitle>
-                <Badge variant="outline" className="bg-blue-600/20 text-blue-400 border-blue-800">
-                  {path.match}% Match
-                </Badge>
-              </div>
-              <CardDescription className="text-certcy-text-secondary">
-                {path.description}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="mb-4">
-                <h4 className="text-sm font-medium mb-1 text-certcy-text-secondary">Key Skills</h4>
-                <div className="flex flex-wrap gap-1">
-                  {path.skills.map((skill, index) => (
-                    <Badge key={index} variant="secondary" className="bg-gray-800 text-gray-300">
-                      {skill}
-                    </Badge>
-                  ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {careerPaths.map((path) => (
+            <Card 
+              key={path.id} 
+              className="bg-certcy-cardbg border-gray-800/50 hover:border-blue-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10 hover:-translate-y-1"
+            >
+              <CardHeader className="space-y-4">
+                <div className="flex justify-between items-start">
+                  <CardTitle className="text-xl text-white">
+                    <HoverCard>
+                      <HoverCardTrigger>
+                        <span className="cursor-help">{path.title}</span>
+                      </HoverCardTrigger>
+                      <HoverCardContent className="w-80 bg-certcy-darkbg border-gray-800">
+                        <div className="space-y-2">
+                          <h4 className="text-sm font-semibold text-white">{path.title}</h4>
+                          <p className="text-sm text-certcy-text-secondary">{path.description}</p>
+                        </div>
+                      </HoverCardContent>
+                    </HoverCard>
+                  </CardTitle>
+                  <Badge 
+                    variant="outline" 
+                    className={cn(
+                      "bg-blue-600/20 border-blue-800",
+                      path.match >= 90 ? "text-green-400" : 
+                      path.match >= 80 ? "text-blue-400" : 
+                      "text-gray-400"
+                    )}
+                  >
+                    {path.match}% Match
+                  </Badge>
                 </div>
-              </div>
+                <CardDescription className="text-certcy-text-secondary min-h-[3rem]">
+                  {path.description}
+                </CardDescription>
+              </CardHeader>
               
-              <div className="grid grid-cols-2 gap-2 mb-5">
+              <CardContent className="space-y-6">
                 <div>
-                  <h4 className="text-sm font-medium mb-1 text-certcy-text-secondary">Growth</h4>
-                  <p className="text-sm">{path.growth}</p>
+                  <h4 className="text-sm font-medium mb-2 text-certcy-text-secondary">Key Skills</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {path.skills.map((skill, index) => (
+                      <Badge 
+                        key={index} 
+                        variant="secondary" 
+                        className="bg-gray-800/50 text-gray-300 hover:bg-gray-700/50 transition-colors"
+                      >
+                        {skill}
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
-                <div>
-                  <h4 className="text-sm font-medium mb-1 text-certcy-text-secondary">Avg. Salary</h4>
-                  <p className="text-sm">{path.salary}</p>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-certcy-text-secondary">
+                      <TrendingUp className="w-4 h-4" />
+                      <h4 className="text-sm font-medium">Growth</h4>
+                    </div>
+                    <p className="text-sm text-white">{path.growth}</p>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2 text-certcy-text-secondary">
+                      <DollarSign className="w-4 h-4" />
+                      <h4 className="text-sm font-medium">Salary</h4>
+                    </div>
+                    <p className="text-sm text-white">{path.salary}</p>
+                  </div>
                 </div>
-              </div>
 
-              <Button 
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-                onClick={() => handleExplore(path.id)}
-              >
-                Explore Path <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
+                <Button 
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white transition-all duration-300 group"
+                  onClick={() => handleExplore(path.id)}
+                >
+                  Explore Path 
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
     </Layout>
   );
