@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { MilestoneProgress } from "@/components/roadmap/MilestoneProgress";
+import { SkillAssessmentForm } from "@/components/assessment/SkillAssessmentForm";
 
 const roadmaps = {
   "data-scientist": {
@@ -120,6 +121,8 @@ const CareerRoadmap = () => {
   const [roadmapData, setRoadmapData] = useState<any>(null);
   const [taskStates, setTaskStates] = useState<{[key: string]: boolean}>({});
   const [lastCompletedTask, setLastCompletedTask] = useState<string | null>(null);
+  const [hasCompletedAssessment, setHasCompletedAssessment] = useState<boolean>(false);
+  const [skillLevel, setSkillLevel] = useState<"beginner" | "intermediate" | "advanced" | null>(null);
   
   useEffect(() => {
     if (pathId && pathId in roadmaps) {
@@ -141,6 +144,37 @@ const CareerRoadmap = () => {
     }
   }, [pathId, navigate]);
   
+  const handleAssessmentComplete = (level: "beginner" | "intermediate" | "advanced") => {
+    setSkillLevel(level);
+    setHasCompletedAssessment(true);
+  };
+  
+  if (!roadmapData) {
+    return null;
+  }
+
+  if (!hasCompletedAssessment) {
+    return (
+      <Layout pageTitle="Skill Assessment">
+        <div className="mb-8">
+          <Button 
+            variant="outline" 
+            onClick={() => navigate("/career-pivot")}
+            className="text-certcy-text-secondary group"
+          >
+            <ArrowLeft className="mr-2 h-4 w-4 group-hover:-translate-x-1 transition-transform" />
+            Back to Career Paths
+          </Button>
+        </div>
+        
+        <SkillAssessmentForm 
+          pathId={pathId as string} 
+          onComplete={handleAssessmentComplete} 
+        />
+      </Layout>
+    );
+  }
+
   if (!roadmapData) {
     return null;
   }
