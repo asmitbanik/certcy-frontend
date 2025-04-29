@@ -23,6 +23,38 @@ interface AssessmentQuestion {
 }
 
 const questions: { [key: string]: AssessmentQuestion[] } = {
+  "general": [
+    {
+      id: "tech",
+      question: "How would you rate your technical skills?",
+      options: [
+        { value: "none", label: "No technical background", points: 0 },
+        { value: "basic", label: "Basic understanding of technology", points: 1 },
+        { value: "intermediate", label: "Comfortable with common technologies", points: 2 },
+        { value: "advanced", label: "Advanced technical knowledge", points: 3 }
+      ]
+    },
+    {
+      id: "data",
+      question: "How comfortable are you working with data?",
+      options: [
+        { value: "none", label: "No experience with data analysis", points: 0 },
+        { value: "basic", label: "Can read basic charts and reports", points: 1 },
+        { value: "intermediate", label: "Can analyze data with tools", points: 2 },
+        { value: "advanced", label: "Expert in data analysis", points: 3 }
+      ]
+    },
+    {
+      id: "coding",
+      question: "What's your level of programming experience?",
+      options: [
+        { value: "none", label: "Never coded before", points: 0 },
+        { value: "basic", label: "Basic understanding of coding concepts", points: 1 },
+        { value: "intermediate", label: "Can write functional code", points: 2 },
+        { value: "advanced", label: "Expert programmer", points: 3 }
+      ]
+    }
+  ],
   "data-scientist": [
     {
       id: "python",
@@ -122,7 +154,7 @@ export const SkillAssessmentForm = ({ pathId, onComplete }: SkillAssessmentFormP
       }));
       
       if (isLastQuestion) {
-        const totalPoints = Object.values(answers).reduce((sum, points) => sum + points, 0);
+        const totalPoints = Object.values({...answers, [currentQuestion.id]: selectedOption.points}).reduce((sum, points) => sum + points, 0);
         const maxPoints = pathQuestions.length * 3;
         const percentage = (totalPoints / maxPoints) * 100;
         

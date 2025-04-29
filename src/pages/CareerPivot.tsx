@@ -1,12 +1,14 @@
+
 import { useState } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, TrendingUp, DollarSign, Briefcase } from "lucide-react";
+import { ArrowRight, TrendingUp, DollarSign } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { cn } from "@/lib/utils";
+import { SkillAssessmentForm } from "@/components/assessment/SkillAssessmentForm";
 
 interface CareerPath {
   id: string;
@@ -68,11 +70,40 @@ const careerPaths: CareerPath[] = [
 
 const CareerPivot = () => {
   const [selectedPath, setSelectedPath] = useState<string | null>(null);
+  const [hasCompletedAssessment, setHasCompletedAssessment] = useState<boolean>(false);
+  const [skillLevel, setSkillLevel] = useState<"beginner" | "intermediate" | "advanced" | null>(null);
   const navigate = useNavigate();
 
   const handleExplore = (pathId: string) => {
     navigate(`/career-pivot/${pathId}`);
   };
+
+  const handleAssessmentComplete = (level: "beginner" | "intermediate" | "advanced") => {
+    setSkillLevel(level);
+    setHasCompletedAssessment(true);
+  };
+
+  if (!hasCompletedAssessment) {
+    return (
+      <Layout pageTitle="Career Assessment">
+        <div className="space-y-6">
+          <div className="max-w-3xl">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent animate-fade-in">
+              Skill Assessment
+            </h1>
+            <p className="text-certcy-text-secondary mt-4 text-lg leading-relaxed animate-fade-in">
+              Before exploring career options, let's assess your current skills to provide the most relevant recommendations.
+            </p>
+          </div>
+          
+          <SkillAssessmentForm 
+            pathId="general" 
+            onComplete={handleAssessmentComplete}
+          />
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout pageTitle="Career Pivot">
@@ -82,8 +113,8 @@ const CareerPivot = () => {
             Discover Your Next Career Move
           </h1>
           <p className="text-certcy-text-secondary mt-4 text-lg leading-relaxed animate-fade-in">
-            Explore AI-recommended career paths tailored to your unique skills and experience. 
-            Each path is carefully analyzed to ensure the best match for your professional growth.
+            Based on your {skillLevel} skill level, here are the AI-recommended career paths 
+            tailored to your unique abilities and experience.
           </p>
         </div>
 
