@@ -4,16 +4,13 @@ import { Layout } from "@/components/layout/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, TrendingUp, DollarSign, Compass, Route, Globe } from "lucide-react";
+import { ArrowRight, TrendingUp, DollarSign, Compass, Route } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { cn } from "@/lib/utils";
 import { SkillAssessmentForm } from "@/components/assessment/SkillAssessmentForm";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { toast } from "sonner";
-import { ApiKeyInput } from "@/components/openai/ApiKeyInput";
-import { analyzeContentWithOpenAI, extractWebsiteContent } from "@/services/openai";
-import { Input } from "@/components/ui/input";
 
 interface CareerPath {
   id: string;
@@ -25,8 +22,7 @@ interface CareerPath {
   salary: string;
 }
 
-// Default career paths if no OpenAI analysis is done
-const defaultCareerPaths: CareerPath[] = [
+const careerPaths: CareerPath[] = [
   {
     id: "data-scientist",
     title: "Data Scientist",
@@ -79,12 +75,6 @@ const CareerPivot = () => {
   const [hasCompletedAssessment, setHasCompletedAssessment] = useState<boolean>(false);
   const [skillLevel, setSkillLevel] = useState<"beginner" | "intermediate" | "advanced" | null>(null);
   const [showDirectPathway, setShowDirectPathway] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [apiKey, setApiKey] = useState<string>("");
-  const [websiteUrl, setWebsiteUrl] = useState<string>("");
-  const [careerPaths, setCareerPaths] = useState<CareerPath[]>(defaultCareerPaths);
-  const [showApiKeyInput, setShowApiKeyInput] = useState<boolean>(false);
-  
   const navigate = useNavigate();
 
   const handleExplore = (pathId: string) => {
@@ -118,63 +108,6 @@ const CareerPivot = () => {
       });
     }
   };
-  
-  const handleAnalyzeWebsite = async () => {
-    if (!apiKey) {
-      toast.error("Please enter your OpenAI API key");
-      return;
-    }
-    
-    if (!websiteUrl) {
-      toast.error("Please enter a website URL");
-      return;
-    }
-    
-    setLoading(true);
-    
-    try {
-      // Extract the content from the website
-      const content = await extractWebsiteContent(websiteUrl);
-      
-      if (!content) {
-        throw new Error("Failed to extract content from the website");
-      }
-      
-      // Analyze the content with OpenAI
-      const prompt = `
-        Analyze this professional profile or portfolio website content and suggest career paths
-        that would be a good match for the person based on their skills and experience.
-        
-        For each career path, provide:
-        1. A unique "id" (string, kebab-case)
-        2. "title" (string, job title)
-        3. "match" (number between 0-100, how well this career matches their skills)
-        4. "description" (string, short description of the career)
-        5. An array of 5 "skills" (strings) needed for this career
-        6. "growth" (string, market growth potential: "Low", "Moderate", "High", "Very High")
-        7. "salary" (string, salary range like "$X,XXX - $Y,YYY")
-        
-        Return exactly 5 career paths, ordered by match percentage descending.
-        Return only valid JSON as an array of objects without explanations or additional text.
-      `;
-      
-      const result = await analyzeContentWithOpenAI(content, apiKey, prompt, "career paths");
-      
-      if (result && Array.isArray(result)) {
-        setCareerPaths(result as CareerPath[]);
-        setSkillLevel("intermediate"); // Assume intermediate if we're doing website analysis
-        setHasCompletedAssessment(true);
-        toast.success("Analysis complete! Career recommendations generated");
-      } else {
-        throw new Error("Invalid response format from OpenAI");
-      }
-    } catch (error) {
-      console.error("Error analyzing website:", error);
-      toast.error("Failed to analyze the website. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (!hasCompletedAssessment) {
     return (
@@ -189,49 +122,10 @@ const CareerPivot = () => {
             </p>
           </div>
           
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-xl font-semibold text-white">Complete the assessment form</h3>
-              
-              <Button 
-                variant="outline" 
-                className="border-blue-500/30 text-blue-500 hover:bg-blue-500/10"
-                onClick={() => setShowApiKeyInput(!showApiKeyInput)}
-              >
-                <Globe className="w-4 h-4 mr-2" /> 
-                Analyze Portfolio Website
-              </Button>
-            </div>
-            
-            {showApiKeyInput && (
-              <div className="space-y-4 p-4 border border-blue-500/20 rounded-lg bg-blue-500/5">
-                <ApiKeyInput onApiKeyChange={setApiKey} />
-                
-                <div className="flex space-x-2">
-                  <Input
-                    placeholder="Enter your portfolio or LinkedIn URL"
-                    className="bg-gray-900 border-gray-700 text-white flex-grow"
-                    value={websiteUrl}
-                    onChange={(e) => setWebsiteUrl(e.target.value)}
-                  />
-                  <Button 
-                    onClick={handleAnalyzeWebsite}
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
-                    disabled={loading || !apiKey || !websiteUrl}
-                  >
-                    {loading ? "Analyzing..." : "Analyze"}
-                  </Button>
-                </div>
-              </div>
-            )}
-            
-            {!showApiKeyInput && (
-              <SkillAssessmentForm 
-                pathId="general" 
-                onComplete={handleAssessmentComplete}
-              />
-            )}
-          </div>
+          <SkillAssessmentForm 
+            pathId="general" 
+            onComplete={handleAssessmentComplete}
+          />
         </div>
       </Layout>
     );
