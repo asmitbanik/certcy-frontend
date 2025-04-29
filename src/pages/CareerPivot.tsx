@@ -4,11 +4,13 @@ import { Layout } from "@/components/layout/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, TrendingUp, DollarSign } from "lucide-react";
+import { ArrowRight, TrendingUp, DollarSign, Compass, Route } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { cn } from "@/lib/utils";
 import { SkillAssessmentForm } from "@/components/assessment/SkillAssessmentForm";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { toast } from "sonner";
 
 interface CareerPath {
   id: string;
@@ -72,6 +74,7 @@ const CareerPivot = () => {
   const [selectedPath, setSelectedPath] = useState<string | null>(null);
   const [hasCompletedAssessment, setHasCompletedAssessment] = useState<boolean>(false);
   const [skillLevel, setSkillLevel] = useState<"beginner" | "intermediate" | "advanced" | null>(null);
+  const [showDirectPathway, setShowDirectPathway] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const handleExplore = (pathId: string) => {
@@ -81,6 +84,29 @@ const CareerPivot = () => {
   const handleAssessmentComplete = (level: "beginner" | "intermediate" | "advanced") => {
     setSkillLevel(level);
     setHasCompletedAssessment(true);
+  };
+
+  const handleDirectPathway = (targetCareer: string) => {
+    if (!targetCareer.trim()) {
+      toast.error("Please enter a career path");
+      return;
+    }
+    
+    // Find if we have this career path in our system
+    const matchedPath = careerPaths.find(
+      path => path.title.toLowerCase().includes(targetCareer.toLowerCase())
+    );
+    
+    if (matchedPath) {
+      setSelectedPath(matchedPath.id);
+      navigate(`/career-pivot/${matchedPath.id}/roadmap`);
+    } else {
+      // For demonstration purposes, navigate to a generic roadmap
+      toast.success(`Creating custom roadmap for ${targetCareer}`);
+      navigate('/career-pivot/custom-path/roadmap', { 
+        state: { customCareer: targetCareer } 
+      });
+    }
   };
 
   if (!hasCompletedAssessment) {
@@ -107,7 +133,7 @@ const CareerPivot = () => {
 
   return (
     <Layout pageTitle="Career Pivot">
-      <div className="space-y-6">
+      <div className="space-y-6 relative">
         <div className="max-w-3xl">
           <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent animate-fade-in">
             Discover Your Next Career Move
@@ -116,6 +142,49 @@ const CareerPivot = () => {
             Based on your {skillLevel} skill level, here are the AI-recommended career paths 
             tailored to your unique abilities and experience.
           </p>
+        </div>
+
+        {/* Direct pathway button in corner */}
+        <div className="absolute top-0 right-0">
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button 
+                variant="outline" 
+                className="bg-blue-600/10 border-blue-500/30 text-blue-500 hover:bg-blue-600/20 flex items-center gap-2"
+              >
+                <Compass className="w-4 h-4" />
+                I know what I want
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80 bg-certcy-darkbg border-gray-800">
+              <div className="space-y-4">
+                <h4 className="font-medium text-white">Already have a career in mind?</h4>
+                <p className="text-sm text-certcy-text-secondary">
+                  Tell us what career you want to pivot to, and we'll create a custom roadmap for you.
+                </p>
+                
+                <div className="flex flex-col space-y-2">
+                  <input 
+                    type="text" 
+                    placeholder="e.g., Data Scientist, Product Manager" 
+                    className="bg-gray-800 border-gray-700 rounded-md p-2 text-white"
+                    onKeyDown={(e) => e.key === 'Enter' && handleDirectPathway(e.currentTarget.value)}
+                  />
+                  
+                  <Button 
+                    className="w-full flex items-center gap-2 bg-blue-600 hover:bg-blue-700"
+                    onClick={(e) => {
+                      const input = (e.currentTarget.previousSibling as HTMLInputElement);
+                      handleDirectPathway(input.value);
+                    }}
+                  >
+                    <Route className="w-4 h-4" />
+                    Show My Roadmap
+                  </Button>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
